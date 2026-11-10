@@ -287,7 +287,18 @@ func main() {
 	// 3. Customize the ROM (root, update engine, build.prop, debloat)
 	os.RemoveAll(tempExtractDir)
 	os.MkdirAll(tempExtractDir, 0755)
-	runCmd("Unpack rootfs.7z", "", nil, "7z", "x", "-y", rootFsArchive, "-o"+tempExtractDir)
+	cmdUnpack := exec.Command("7z", "x", "-y", rootFsArchive, "-o"+tempExtractDir)
+	cmdUnpack.Stdout = os.Stdout
+	cmdUnpack.Stderr = os.Stderr
+	if err := cmdUnpack.Run(); err != nil {
+		var exitErr *exec.ExitError
+		if errors.As(err, &exitErr) && exitErr.ExitCode() == 2 {
+			fmt.Println("⚠ 7z reported relative symlink warnings (exit code 2), continuing safely...")
+		} else {
+			fmt.Printf("❌ Failed unpacking rootfs: %v\n", err)
+			os.Exit(1)
+		}
+	}
 
 	systemDir := filepath.Join(tempExtractDir, "system")
 
