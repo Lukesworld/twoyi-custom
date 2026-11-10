@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	OfficialReleaseRootFS = "https://github.com/twoyi/twoyi/releases/download/0.5.4/twoyi-0.5.4.apk"
+	OfficialReleaseRootFS = "https://github.com/twoyi/twoyi/releases/download/0.5.4/twoyi_0.5.4-03211927-release.apk"
 	BusyboxARM64URL       = "https://github.com/docker-library/busybox/raw/master/glibc/busybox.tar.gz" // Alternative: toybox/busybox static binary
 	KeyAlias              = "twoyikey"
 	KeyPass               = "android"
