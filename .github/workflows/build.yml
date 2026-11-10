@@ -24,9 +24,19 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Install Android NDK r22b & Build Tools
+      - name: Set up Rust & Cargo-XDK
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - name: Install Toolchain Dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y p7zip-full
+          cargo install cargo-xdk || true
+          chmod +x gradlew || true
+
+      - name: Install Android NDK r22b & Build Tools
+        run: |
           wget -q https://dl.google.com/android/repository/android-ndk-r22b-linux-x86_64.zip
           unzip -q android-ndk-r22b-linux-x86_64.zip -d $HOME
           echo "ANDROID_NDK_HOME=$HOME/android-ndk-r22b" >> $GITHUB_ENV
